@@ -13,7 +13,7 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-4xl mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">Grocery Lists</h1>
+      <h1 className="text-3xl font-bold mb-6">Welcome to the Dashboard</h1>
       <CreateForm onSuccess={mutate} />
 
       <div className="mt-8 space-y-4">

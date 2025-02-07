@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '@/lib/validations';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -53,6 +54,7 @@ export default function LoginPage() {
             <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
           )}
         </div>
+        
 
         <button
           type="submit"
@@ -60,6 +62,9 @@ export default function LoginPage() {
         >
           Sign In
         </button>
+        <div className='mt-2'>
+          <Link href='/auth/register' className='text-blue-600 hover:underline'>New User? Register!</Link>
+        </div>
       </form>
     </div>
   );

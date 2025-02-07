@@ -1,50 +1,64 @@
 'use client';
 
-import { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useState, useEffect } from 'react';
 
-export default function AvatarUpload() {
-  const [loading, setLoading] = useState(false);
-  const { data: session, update } = useSession();
+export default function AvatarUpload({ currentAvatar, onUpload }) {
+  const [preview, setPreview] = useState(currentAvatar); // Show existing avatar if available
+  const [file, setFile] = useState(null);
 
-  const handleUpload = async (e) => {
-    const file = e.target.files[0];
+  useEffect(() => {
+    setPreview(currentAvatar); // Update when avatar changes
+  }, [currentAvatar]);
+
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      setPreview(URL.createObjectURL(selectedFile)); // Preview the selected file
+      setFile(selectedFile);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!file) return;
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET);
+    formData.append('avatar', file);
 
     try {
-      setLoading(true);
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-        { method: 'POST', body: formData }
-      );
-      const data = await res.json();
-      
-      await fetch('/api/users/avatar', {
-        method: 'PUT',
-        body: JSON.stringify({ avatar: data.secure_url })
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        body: formData,
       });
-      
-      await update({ avatar: data.secure_url });
+
+      const data = await response.json();
+      if (response.ok) {
+        onUpload(data.avatarUrl); // Update the parent component with the new avatar URL
+        setPreview(data.avatarUrl); // Update the preview
+      } else {
+        alert(data.error);
+      }
     } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
+      console.error('Upload failed:', error);
     }
   };
 
   return (
-    <div className="flex items-center gap-4">
-      <img 
-        src={session?.user?.avatar || '/default-avatar.png'} 
-        className="w-16 h-16 rounded-full"
-        alt="Avatar"
-      />
-      <label className="px-4 py-2 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-700">
-        {loading ? 'Uploading...' : 'Change Avatar'}
-        <input type="file" className="hidden" onChange={handleUpload} />
+    <div className="flex flex-col items-center space-y-4">
+      <div className="w-32 h-32 rounded-full border overflow-hidden">
+        {preview ? (
+          <img src={preview} alt="Avatar preview" className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-gray-500">
+            No Avatar
+          </div>
+        )}
+      </div>
+      <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" id="avatarInput" />
+      <label htmlFor="avatarInput" className="bg-gray-200 px-4 py-2 rounded cursor-pointer hover:bg-gray-300">
+        Choose Image
       </label>
+      <button onClick={handleUpload} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        Upload
+      </button>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema } from '@/lib/validations';
 import toast from 'react-hot-toast';
+import Link from 'next/link'
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -80,6 +81,9 @@ export default function RegisterPage() {
         >
           Register
         </button>
+        <div className='mt-2'>
+          <Link href='/auth/login' className='text-blue-600 hover:underline'>Already Registered? Login!</Link>
+        </div>
       </form>
     </div>
   );
