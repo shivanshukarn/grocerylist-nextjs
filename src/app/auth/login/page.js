@@ -24,7 +24,7 @@ export default function LoginPage() {
     if (result?.error) {
       toast.error(result.error);
     } else {
-      router.push(result.url);
+      router.replace(result?.url || '/dashboard');
     }
   };
 
