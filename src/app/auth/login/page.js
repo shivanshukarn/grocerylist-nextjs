@@ -17,13 +17,14 @@ export default function LoginPage() {
   const onSubmit = async (data) => {
     const result = await signIn('credentials', {
       redirect: false,
+      callbackUrl: '/dashboard',
       ...data
     });
     
     if (result?.error) {
       toast.error(result.error);
     } else {
-      router.push('/dashboard');
+      router.push(result.url);
     }
   };
 
