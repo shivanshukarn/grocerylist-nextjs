@@ -20,8 +20,6 @@ export default function LoginPage() {
       ...data
     });
 
-    console.log(result)
-
     if (result.url && result.ok === true) {
       router.push("/dashboard");
     } else {
