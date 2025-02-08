@@ -16,19 +16,24 @@ export default function LoginPage() {
 
   const onSubmit = async (data) => {
     const result = await signIn('credentials', {
+      redirect: false,
       ...data
     });
-    
-    if (result?.error) {
+
+    console.log(result)
+
+    if (result.url && result.ok === true) {
+      router.push("/dashboard");
+    } else {
       toast.error(result.error);
-    } 
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-8 rounded-lg shadow-md w-96">
         <h2 className="text-2xl font-bold mb-6 text-center">Welcome Back</h2>
-        
+
         <div className="mb-4">
           <label className="block text-gray-700 mb-2">Email or Phone</label>
           <input
@@ -51,7 +56,7 @@ export default function LoginPage() {
             <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
           )}
         </div>
-        
+
 
         <button
           type="submit"
