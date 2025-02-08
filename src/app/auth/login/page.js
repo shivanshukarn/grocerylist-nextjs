@@ -22,16 +22,13 @@ export default function LoginPage() {
 
     console.log(result)
 
-    if (router.isFallback) {
-      console.log("------------------------Fallback came from router------------------------");
-    }else{
-      console.log("------------------------Fallback did not come from router------------------------");
-    }
+    console.log("router before redirect",router)
 
     if (result.url && result.ok === true) {
       console.log("Before redirect");
       router.push("/dashboard", { replace: true });
       console.log("After redirect");
+      console.log("router after redirect",router)
     } else {
       toast.error(result.error);
     }
