@@ -20,8 +20,12 @@ export default function LoginPage() {
       ...data
     });
 
+    console.log(result)
+
     if (result.url && result.ok === true) {
+      console.log("Before redirect");
       router.push("/dashboard");
+      console.log("After redirect");
     } else {
       toast.error(result.error);
     }
