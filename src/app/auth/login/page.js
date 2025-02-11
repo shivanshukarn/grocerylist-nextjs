@@ -20,16 +20,8 @@ export default function LoginPage() {
       ...data
     });
 
-    console.log(result)
-
-    console.log("router before redirect",router)
-
     if (result.url && result.ok === true) {
-      console.log("Before redirect");
-      // router.push("/dashboard", { replace: true });
       router.refresh();
-      console.log("After redirect");
-      console.log("router after redirect",router)
     } else {
       toast.error(result.error);
     }
