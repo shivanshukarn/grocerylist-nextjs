@@ -26,7 +26,8 @@ export default function LoginPage() {
 
     if (result.url && result.ok === true) {
       console.log("Before redirect");
-      router.push("/dashboard", { replace: true });
+      // router.push("/dashboard", { replace: true });
+      router.refresh();
       console.log("After redirect");
       console.log("router after redirect",router)
     } else {
