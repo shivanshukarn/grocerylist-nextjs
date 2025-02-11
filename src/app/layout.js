@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SessionProviderWrapper from '@/components/Shared/SessionProviderWrapper';
 import Navbar from "@/components/Ui/Navbar";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
           <Navbar />
           {children}
         </SessionProviderWrapper>
+        <Toaster position="bottom-center" reverseOrder={true} />
       </body>
     </html>
   );

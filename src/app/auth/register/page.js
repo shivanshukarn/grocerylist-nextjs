@@ -14,6 +14,7 @@ export default function RegisterPage() {
   });
 
   const onSubmit = async (data) => {
+    const toastId = toast.loading('Registering...');
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
@@ -23,12 +24,13 @@ export default function RegisterPage() {
       
       if (res.ok) {
         router.push('/auth/login');
+        toast.success('User Registered Successifully', { id: toastId });
       } else {
         const error = await res.json();
         throw new Error(error.error);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error('Failed to register user. Please try again.', { id: toastId });
     }
   };
 

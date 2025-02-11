@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '@/lib/validations';
 import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import Link from 'next/link';
 
 export default function LoginPage() {
@@ -15,15 +15,18 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data) => {
+    const toastId = toast.loading('Logging In...');
+
     const result = await signIn('credentials', {
       redirect: false,
       ...data
     });
 
-    if (result.url && result.ok === true) {
+    if (result?.ok) {
+      toast.success('Logged in successfully!', { id: toastId });
       router.refresh();
     } else {
-      toast.error(result.error);
+      toast.error(result?.error || 'Login failed. Please try again.', { id: toastId });
     }
   };
 
